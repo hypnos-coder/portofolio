@@ -310,3 +310,63 @@ function debounce(func, wait) {
         }, 2000);
     }
 })();
+
+// === Matrix Choice & 3D Effects ===
+document.addEventListener('DOMContentLoaded', () => {
+    const landingOverlay = document.getElementById('landing-overlay');
+    const bluePill = document.getElementById('blue-pill-wrapper');
+    const redPill = document.getElementById('red-pill-wrapper');
+    const body = document.body;
+
+    // Check if choice was already made (optional: localStorage)
+    // For now, always show choice on reload as per "experience" request
+
+    if (bluePill && redPill) {
+        // Blue Pill: Reality
+        bluePill.addEventListener('click', () => {
+            landingOverlay.style.opacity = '0';
+            setTimeout(() => {
+                landingOverlay.classList.add('hidden');
+                body.classList.add('reality-mode');
+                // Stop matrix rain if needed, or just hide it via CSS (already done)
+            }, 1000);
+        });
+
+        // Red Pill: Matrix
+        redPill.addEventListener('click', () => {
+            // Warp effect
+            body.classList.add('warp-effect');
+
+            setTimeout(() => {
+                landingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    landingOverlay.classList.add('hidden');
+                    body.classList.remove('warp-effect');
+                }, 500);
+            }, 500);
+        });
+    }
+
+    // === 3D Tilt Effect for Cards ===
+    const cards = document.querySelectorAll('.glass-card');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg rotation
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+    });
+});

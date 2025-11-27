@@ -11,27 +11,27 @@
     --matrix-black: #000000;
     --matrix-dark-bg: #0a0e0a;
     --matrix-card-bg: rgba(0, 59, 0, 0.3);
-    
+
     /* Accent Colors */
     --accent-cyan: #00FFFF;
     --accent-lime: #CCFF00;
-    
+
     /* Typography */
     --font-primary: 'Orbitron', sans-serif;
     --font-mono: 'Roboto Mono', monospace;
-    
+
     /* Spacing */
     --spacing-xs: 0.5rem;
     --spacing-sm: 1rem;
     --spacing-md: 2rem;
     --spacing-lg: 4rem;
     --spacing-xl: 6rem;
-    
+
     /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
-    
+
     /* Shadows & Glows */
     --glow-sm: 0 0 10px var(--matrix-green-glow);
     --glow-md: 0 0 20px var(--matrix-green-glow);
@@ -540,6 +540,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -547,18 +548,25 @@ body {
 }
 
 @keyframes blink {
-    0%, 50% {
+
+    0%,
+    50% {
         opacity: 1;
     }
-    51%, 100% {
+
+    51%,
+    100% {
         opacity: 0;
     }
 }
 
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -569,28 +577,28 @@ body {
     .nav-menu {
         gap: 1rem;
     }
-    
+
     .nav-link {
         font-size: 0.9rem;
     }
-    
+
     .hero {
         padding: var(--spacing-md) var(--spacing-sm);
     }
-    
+
     .hero-cta {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .btn {
         width: 100%;
     }
-    
+
     .section {
         padding: var(--spacing-lg) var(--spacing-sm);
     }
-    
+
     .skills-grid,
     .projects-grid,
     .contact-methods {
@@ -602,20 +610,239 @@ body {
     .nav-container {
         padding: 1rem;
     }
-    
+
     .nav-menu {
         gap: 0.5rem;
     }
-    
+
     .nav-link {
         font-size: 0.8rem;
     }
-    
+
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .section-title {
         font-size: 2rem;
     }
+}
+
+/* === Landing Overlay === */
+.landing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: opacity 1s ease, visibility 1s ease;
+}
+
+.landing-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.landing-content {
+    max-width: 800px;
+    padding: 2rem;
+    animation: fadeIn 2s ease;
+}
+
+.landing-title {
+    font-family: var(--font-primary);
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: #fff;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.landing-subtitle {
+    font-size: 1.2rem;
+    color: #aaa;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.blue-text {
+    color: #0088ff;
+    text-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+}
+
+.red-text {
+    color: #ff3333;
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+}
+
+/* === Pills === */
+.pills-container {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 3rem;
+    perspective: 1000px;
+}
+
+.pill-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.pill-wrapper:hover {
+    transform: scale(1.1);
+}
+
+.pill {
+    width: 60px;
+    height: 140px;
+    /* Vertical pill */
+    border-radius: 30px;
+    position: relative;
+    box-shadow:
+        inset -10px -10px 20px rgba(0, 0, 0, 0.5),
+        inset 10px 10px 20px rgba(255, 255, 255, 0.4),
+        0 10px 20px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+.blue-pill {
+    background: linear-gradient(135deg, #0044cc, #0088ff);
+    box-shadow: 0 0 20px rgba(0, 136, 255, 0.4);
+}
+
+.blue-pill:hover {
+    box-shadow: 0 0 40px rgba(0, 136, 255, 0.8);
+}
+
+.red-pill {
+    background: linear-gradient(135deg, #cc0000, #ff3333);
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.4);
+}
+
+.red-pill:hover {
+    box-shadow: 0 0 40px rgba(255, 51, 51, 0.8);
+}
+
+/* Horizontal reflection line */
+.pill::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 15%;
+    width: 20%;
+    height: 40%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    filter: blur(2px);
+}
+
+.pill-label {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.pill-wrapper:hover .pill-label {
+    opacity: 1;
+}
+
+/* === Reality Mode Styles === */
+body.reality-mode {
+    --matrix-black: #ffffff;
+    --matrix-green: #333333;
+    --matrix-green-dark: #e0e0e0;
+    --matrix-green-glow: rgba(0, 0, 0, 0.1);
+    --matrix-dark-bg: #f5f5f5;
+    --matrix-card-bg: rgba(255, 255, 255, 0.8);
+    --accent-cyan: #0066cc;
+    --font-primary: 'Roboto Mono', sans-serif;
+    /* Cleaner look */
+
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+body.reality-mode #matrix-canvas {
+    display: none;
+}
+
+body.reality-mode .nav {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid #ddd;
+}
+
+body.reality-mode .glass-card {
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body.reality-mode .glass-card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-cyan);
+}
+
+body.reality-mode .skill-icon,
+body.reality-mode .contact-icon {
+    filter: none;
+    /* Remove invert */
+    color: #333;
+}
+
+body.reality-mode .btn-primary {
+    background: var(--accent-cyan);
+    color: white;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 4px 10px rgba(0, 102, 204, 0.3);
+}
+
+body.reality-mode .btn-secondary {
+    color: #333;
+    border-color: #333;
+}
+
+body.reality-mode .btn-secondary:hover {
+    background: #333;
+    color: white;
+}
+
+/* === 3D Transition Effects === */
+.warp-effect {
+    animation: warpSpeed 1s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+
+@keyframes warpSpeed {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    50% {
+        transform: scale(1.5);
+        filter: brightness(2) blur(2px);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* 3D Tilt Base */
+.glass-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
 }
