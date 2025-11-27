@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reality | Simulation</title>
+    <link rel="stylesheet" href="reality.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #d4d4d4;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: monospace;
+            font-size: 1.5rem;
+            color: #333;
+            pointer-events: none;
+        }
+    </style>
+    <!-- Import Map for Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "./three.module.js"
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="loading">Loading Simulation...</div>
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <div class="reality-status">
+            <span class="status-dot"></span>
+            SIMULATION ACTIVE
+        </div>
+        <button id="logout-btn" class="logout-btn">WAKE UP</button>
+    </div>
+
+    <script type="module" src="reality.js"></script>
+</body>
+
+</html>

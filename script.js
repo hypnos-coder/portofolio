@@ -322,14 +322,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // For now, always show choice on reload as per "experience" request
 
     if (bluePill && redPill) {
-        // Blue Pill: Reality
+        // Blue Pill: Reality (Metacortex Intranet)
         bluePill.addEventListener('click', () => {
             landingOverlay.style.opacity = '0';
             setTimeout(() => {
-                landingOverlay.classList.add('hidden');
-                body.classList.add('reality-mode');
-                // Stop matrix rain if needed, or just hide it via CSS (already done)
-            }, 1000);
+                window.location.href = 'reality.html';
+            }, 500);
         });
 
         // Red Pill: Matrix
@@ -369,4 +367,23 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         });
     });
+
+    // === System Reset ===
+    const resetButton = document.getElementById('system-reset');
+    if (resetButton) {
+        resetButton.addEventListener('click', () => {
+            // Fade in overlay
+            landingOverlay.classList.remove('hidden');
+            landingOverlay.style.opacity = '1';
+
+            // Reset styles after overlay covers screen
+            setTimeout(() => {
+                body.classList.remove('reality-mode');
+                body.classList.remove('warp-effect');
+                // Ensure matrix rain is visible again if it was hidden
+                const canvas = document.getElementById('matrix-canvas');
+                if (canvas) canvas.style.display = '';
+            }, 500);
+        });
+    }
 });

@@ -846,3 +846,45 @@ body.reality-mode .btn-secondary:hover {
     transform-style: preserve-3d;
     perspective: 1000px;
 }
+
+/* === System Reset Button === */
+.system-reset {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+}
+
+.system-reset:hover {
+    transform: rotate(180deg) scale(1.1);
+    box-shadow: 0 0 20px var(--matrix-green);
+    background: var(--matrix-green);
+    color: var(--matrix-black);
+}
+
+/* Reality Mode Reset Button */
+body.reality-mode .system-reset {
+    background: white;
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.reality-mode .system-reset:hover {
+    background: var(--accent-cyan);
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 102, 204, 0.4);
+}
