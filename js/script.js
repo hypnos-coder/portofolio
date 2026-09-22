@@ -321,6 +321,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if choice was already made (optional: localStorage)
     // For now, always show choice on reload as per "experience" request
 
+    if (landingOverlay && window.location.hash === '#projects') {
+        landingOverlay.classList.add('hidden');
+    }
+
     if (bluePill && redPill) {
         // Blue Pill: Reality (Metacortex Intranet)
         bluePill.addEventListener('click', () => {
