@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A facility location model for expanding adult and pediatric burn care access, balancing travel distance, coverage, and equity. Full project report on burn care optimization.">
+    <title>Optimizing Burn Care Access | Project Report</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/opti.css">
+</head>
+<body class="report-page">
+    <nav class="report-nav" aria-label="Project navigation">
+        <a href="index.html#projects">&larr; Back to projects</a>
+        <a href="../assets/write_up.pdf">Open report PDF</a>
+    </nav>
+    <main class="report-main">
+        <header class="report-header">
+            <p class="report-eyebrow">Operations research / Healthcare access</p>
+            <h1>Optimizing the Expansion of Burn Care Access</h1>
+            <p class="report-subtitle">A Facility Location Model with Coverage and Equity</p>
+            <p class="report-meta">Edo Yawovi &middot; <time datetime="2026-09-22">September 22, 2026</time></p>
+            <p>A nationwide optimization study balancing travel distance, population coverage, and equitable access to specialized burn care.</p>
+            <div class="report-actions">
+                <a class="btn btn-primary" href="../assets/write_up.pdf" download>Download Report (PDF)</a>
+                <a class="btn btn-secondary" href="#report">Read the report &darr;</a>
+            </div>
+        </header>
+        <nav class="report-toc" aria-label="Report contents">
+<a href="#abstract">Abstract</a>
+<a href="#introduction">Introduction</a>
+<a href="#literature">Literature review</a>
+<a href="#data">Methodology</a>
+<a href="#model">Mathematical model</a>
+<a href="#implementation">Implementation</a>
+<a href="#results">Experiments and results</a>
+<a href="#analysis">Analysis of results</a>
+<a href="#conclusion">Conclusion</a>
+<a href="#references">References</a>
+<a href="#contributions">Team contributions</a>
+</nav>
+        <article id="report" class="report-content" aria-label="Full project report">
+<section id="abstract" class="report-abstract">
+<h2>Abstract</h2>
+<p>Burn injuries require specialized care that is often concentrated in designated centers. In the United States, many patients must travel long distances to reach a burn center, and access is uneven across geographic and demographic groups. We develop a mixed-integer linear programming model to identify hospitals that should be upgraded to adult or pediatric burn centers to improve access equity. The model minimizes population-weighted travel distance while ensuring that a target fraction of the population is within a threshold distance (coverage) and limiting the number of new designations. Using nationwide ZCTA-level population data and a comprehensive hospital dataset, we evaluate the impact of adding burn capabilities to selected hospitals. Results show that upgrading a modest number of hospitals can dramatically reduce average and maximum travel distances, increase coverage, and reduce disparities. Our approach provides a data-driven tool for policy makers and health planners to allocate resources equitably.</p>
+</section>
+<section id="introduction">
+<h2>1. Introduction</h2>
+<p>Timely access to specialized burn care is critical for patient outcomes, yet many regions of the United States are underserved. The American Burn Association verifies only 76 burn centers, and eight states have none at all <a href="#ref-1">[1]</a>. Furthermore, over half of burn patients are treated at non-verified centers <a href="#ref-3">[3]</a>. The lack of a systematic method to identify where to add burn care capacity hinders efforts to improve access. This study addresses that gap by formulating an optimization model that recommends hospitals for upgrading to adult or pediatric burn centers, balancing efficiency (total travel distance) with equity (coverage within a threshold).</p>
+<h3>1.1 Problem Statement and Motivation</h3>
+<p>Burn injuries represent a significant public health burden. Ivanko et al. <a href="#ref-2">[2]</a> estimate that approximately 600,000 individuals annually suffer burn injuries requiring emergent care in the United States. Despite this high incidence, only 135 burn centers exist nationwide, with</p>
+<p>total burn bed capacity of just 1,130 beds. Texas leads with 206 burn beds, followed by New York (143), California (140), Georgia (129), and Ohio (94). In stark contrast, states such as West Virginia (4 beds), Maine (6 beds), and Hawaii (7 beds) have extremely limited capacity, while Alaska and South Dakota have none. Eight states have no burn center at all. The consequences of this concentration are substantial. Rural populations face disproportionately long travel distances, and over half of severe burn patients are treated at nonverified facilities that may lack specialized resources <a href="#ref-3">[3]</a>. Long transport distances delay definitive care and increase morbidity <a href="#ref-4">[4]</a>. These disparities motivated our work: we need a systematic, data-driven method to identify where new burn care resources should be deployed to maximize improvement in access and equity.</p>
+</section>
+<section id="literature">
+<h2>2. Literature Review</h2>
+<h3>2.1 Burn Care Resources and Access Disparities</h3>
+<p>The National Injury Resource Database (NIRD), developed by Louick et al. <a href="#ref-1">[1]</a>, represents the first comprehensive, up-to-date catalog of all U.S. burn centers and Level I and II trauma centers. Prior to NIRD, no single, publicly available database characterized burn resources across the country, creating challenges for patient routing, disaster planning, and access analysis. The final NIRD dataset includes 135 burn centers and 617 trauma centers, with detailed information on adult and pediatric capabilities, verification status, and bed counts. The distribution of burn centers is highly uneven. ABA-verified centers exist in only 31 states plus Washington, D.C., leaving 11 states with no verified center and 8 states with no burn center of any kind <a href="#ref-1">[1]</a>. Capacity constraints compound the problem. Burn centers operate at or near capacity on a daily basis, and the number of dedicated burn surgeons remains limited, approximately 250 nationwide <a href="#ref-1">[1]</a>. Carmichael et al. <a href="#ref-3">[3]</a> conducted a national analysis of access to verified burn centers, revealing substantial regional disparities. Using geospatial methods, they found that populations in the Mountain West, Midwest, and South face significantly longer travel distances to reach verified centers compared to those in the Northeast and West Coast. The authors estimated that over 20% of the U.S. population lives more than 60 minutes from a verified burn center. Long-distance transport itself poses risks. Klein et al. <a href="#ref-4">[4]</a> analyzed transfers to a regional burn center and found that patients transported more than 100 miles experienced delays in definitive care and higher rates of complications. Their study highlighted the importance of reducing travel distances through strategic placement of burn care resources.</p>
+<h3>2.2 Facility Location Models</h3>
+<p>The problem of siting facilities to serve geographically distributed demand has been extensively studied in operations research. The p-median problem, introduced by Hakimi <a href="#ref-5">[5]</a>, seeks to locate p facilities to minimize the total weighted distance between demand points and their assigned facilities. This formulation is well-suited to problems where efficiency (minimizing total travel cost) is the primary objective.</p>
+<p>The p-center problem, in contrast, minimizes the maximum distance between any demand point and its nearest facility <a href="#ref-6">[6]</a>. This formulation addresses equity directly by focusing on worst-case access rather than average performance. Both the p-median and p-center are NP-hard, but efficient exact and heuristic solution methods exist for problems of practical size. Covering models offer another approach. The maximal covering location problem, formulated by Church and ReVelle <a href="#ref-7">[7]</a>, maximizes the amount of demand covered within a specified distance threshold using a fixed number of facilities. This approach is particularly relevant when a minimum acceptable access standard can be defined. Recent work has combined these classical models to address multiple objectives simultaneously. Owen and Daskin <a href="#ref-8">[8]</a> provide a comprehensive review of strategic facility location, noting that healthcare applications require careful attention to equity considerations alongside efficiency. Our model integrates the p-median objective (minimizing total distance) with coverage constraints to ensure that a minimum fraction of the population has access within a reasonable threshold. This hybrid approach balances the efficiency of the p-median with the equity focus of covering models.</p>
+<h3>2.3 Data and Implementation Considerations</h3>
+<p>Implementing facility location models for healthcare applications requires several types of data: demand estimates, candidate facility locations and capabilities, and travel distances between them. Demand is typically derived from population data, often at the census tract or ZIP code level. For burn care, burn incidence rates must be applied to population counts. Ivanko et al. <a href="#ref-2">[2]</a> synthesized multiple data sources to produce a credible national incidence estimate of 600,000 annual burn injuries requiring emergent care. Hospital location data, including existing burn care capabilities, can be obtained from sources such as the American Hospital Association annual survey, state health departments, and specialized databases like NIRD <a href="#ref-1">[1]</a>. The Homeland Infrastructure Foundation-Level Data (HIFLD) also provides open trauma center location data. Travel distances can be approximated using great-circle (Haversine) distances, which are computationally efficient but less accurate than road network distances. For large-scale models with thousands of demand points and hundreds of candidate facilities, the computational advantages of Haversine distances often outweigh the loss of accuracy, especially for initial planning studies.</p>
+<h3>2.4 Research Gap and Contribution</h3>
+<p>Prior work has documented disparities in burn care access <a href="#ref-3">[3]</a> and provided the necessary data infrastructure <a href="#ref-1">[1]</a>. Facility location models are well-established but have rarely been applied to burn center placement. No previous study, to our knowledge, has used optimization to recommend specific hospitals for upgrading to burn centers based on population demand and existing infrastructure. This gap motivates our contribution: a mixed-integer linear program that identifies optimal locations for new burn care capabilities while balancing efficiency and equity.</p>
+</section>
+<section id="data">
+<h2>3. Approach and Methodology</h2>
+
+                <h3>3.1 Demand Estimation</h3>
+                <p>We used ZCTA (ZIP Code Tabulation Area) level population data from the 2023 American Community Survey 5-year estimates (Table B01001). For each ZCTA <var>i</var>, we computed adult population (age ≥ 18) and pediatric population (age &lt; 18). Annual burn care demand was estimated by applying a national incidence rate of 600,000 burn injuries per year <a href="#ref-2">[2]</a>:</p>
+                <div class="equation equation-stack"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Annual adult demand equals the adult population of ZCTA i divided by total US population, multiplied by 600,000"><mrow><msubsup><mi>h</mi><mrow><mi>i</mi></mrow><mi>adult</mi></msubsup><mo>=</mo><mfrac><msub><mi>adult</mi><mrow><mi>i</mi></mrow></msub><mtext>total US pop</mtext></mfrac><mo>×</mo><mn>600,000</mn></mrow></math><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Annual pediatric demand equals the pediatric population of ZCTA i divided by total US population, multiplied by 600,000"><mrow><msubsup><mi>h</mi><mrow><mi>i</mi></mrow><mi>ped</mi></msubsup><mo>=</mo><mfrac><msub><mi>under18</mi><mrow><mi>i</mi></mrow></msub><mtext>total US pop</mtext></mfrac><mo>×</mo><mn>600,000</mn></mrow></math></div></div>
+                <p>ZCTA centroids (latitude/longitude) were obtained from the Census TIGER/Line shapefiles.</p>
+                <h3>3.2 Hospital Data</h3>
+                <p>A comprehensive list of hospitals with their locations and current burn care capabilities was compiled from the National Injury Resource Database (NIRD) <a href="#ref-1">[1]</a>, supplemented by the American Burn Association, American College of Surgeons, and state health departments. For each hospital <var>j</var> we recorded:</p>
+                <ul><li>Existing adult burn care: <code>burn_adult</code> (0/1).</li><li>Existing pediatric burn care: <code>burn_peds</code> (0/1).</li><li>Latitude and longitude (geocoded).</li></ul>
+                <p>The final dataset contains 634 unique hospitals across the U.S.</p>
+                <h3>3.3 Distance Matrix</h3>
+<p>Travel distances between each ZCTA centroid and each hospital were computed using the Haversine great-circle formula:</p>
+<div class="equation"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Distance equals twice Earth's radius times arcsine of the square root of sine squared of half the latitude difference plus cosine latitude i times cosine latitude j times sine squared of half the longitude difference"><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>2</mn><mi>R</mi><mi>arcsin</mi><mo>(</mo><msqrt><mrow><msup><mi>sin</mi><mn>2</mn></msup><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>φ</mi></mrow><mn>2</mn></mfrac><mo>)</mo><mo>+</mo><mi>cos</mi><msub><mi>φ</mi><mi>i</mi></msub><mi>cos</mi><msub><mi>φ</mi><mi>j</mi></msub><msup><mi>sin</mi><mn>2</mn></msup><mo>(</mo><mfrac><mrow><mi>Δ</mi><mi>λ</mi></mrow><mn>2</mn></mfrac><mo>)</mo></mrow></msqrt><mo>)</mo></mrow></math></div></div>
+<p>Here <var>R</var> = 6371 km is the Earth’s radius, <var>φ</var> is latitude, and <var>λ</var> is longitude. The resulting distance matrix has shape (33,000 × 634) and was stored as a dense NumPy array for computational efficiency.</p>
+
+                <h3 id="model">3.4 Mathematical Model</h3>
+                <p>We formulate a mixed-integer linear program (MILP) to select hospitals for upgrading.</p>
+                <h4>Sets and parameters</h4>
+                <dl class="notation">
+                    <dt><var>I</var></dt><dd>Set of demand points (ZCTAs), indexed by <var>i</var>.</dd>
+                    <dt><var>J</var></dt><dd>Set of candidate hospitals, indexed by <var>j</var>.</dd>
+                    <dt><var>K</var> = {A, P}</dt><dd>Care types: adult and pediatric.</dd>
+                    <dt><var>h</var><sub>i</sub><sup>k</sup></dt><dd>Annual burn demand of type <var>k</var> at ZCTA <var>i</var>.</dd>
+                    <dt><var>d</var><sub>ij</sub></dt><dd>Distance (km) from ZCTA <var>i</var> to hospital <var>j</var>.</dd>
+                    <dt><var>exist</var><sub>j</sub><sup>k</sup></dt><dd>1 if hospital <var>j</var> already provides type <var>k</var> care; 0 otherwise.</dd>
+                    <dt><var>T</var></dt><dd>Coverage threshold (km).</dd>
+                    <dt>α</dt><dd>Minimum fraction of demand that must be covered within <var>T</var>.</dd>
+                    <dt><var>p</var><sub>k</sub></dt><dd>Maximum number of new hospitals to be designated for type <var>k</var>.</dd>
+                </dl>
+                <h4>Decision variables</h4>
+                <ul><li><var>x</var><sub>j</sub><sup>k</sup> ∈ {0, 1}: 1 if hospital <var>j</var> provides type <var>k</var> after expansion.</li><li><var>y</var><sub>ij</sub><sup>k</sup> ∈ {0, 1}: 1 if ZCTA <var>i</var> is assigned to hospital <var>j</var> for type <var>k</var>.</li></ul>
+                <h4>Objective</h4>
+                <div class="equation" role="group" aria-label="Objective: minimize total demand-weighted travel distance"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Objective: minimize total demand-weighted travel distance"><mrow><mo>min</mo><munder><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><mi>K</mi></mrow></munder><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>I</mi></mrow></munder><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>J</mi></mrow></munder><msubsup><mi>h</mi><mrow><mi>i</mi></mrow><mi>k</mi></msubsup><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msubsup><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>k</mi></msubsup></mrow></math></div></div><p class="equation-description">Minimize total travel distance weighted by annual burn care demand across both care types.</p>
+                <h4>Constraints</h4>
+                <div class="equation" role="group" aria-label="Constraint 1: assign each demand point to exactly one hospital"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 1: assign each demand point to exactly one hospital"><mrow><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>J</mi></mrow></munder><msubsup><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>k</mi></msubsup><mo>=</mo><mn>1</mn></mrow></math><span class="equation-qualifier">For every i ∈ I and k ∈ K.</span></div><span class="equation-number">(1)</span></div><p class="equation-description"><strong>Every ZCTA is assigned to exactly one hospital for each care type.</strong></p><div class="equation" role="group" aria-label="Constraint 2: assign demand only to an available service"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 2: assign demand only to an available service"><mrow><msubsup><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>k</mi></msubsup><mo>≤</mo><msubsup><mi>x</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup></mrow></math><span class="equation-qualifier">For every i ∈ I, j ∈ J, and k ∈ K.</span></div><span class="equation-number">(2)</span></div><p class="equation-description"><strong>Assignment is permitted only to a hospital that offers the required service.</strong></p><div class="equation" role="group" aria-label="Constraint 3: preserve existing burn care capabilities"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 3: preserve existing burn care capabilities"><mrow><msubsup><mi>x</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup><mo>≥</mo><msubsup><mi>exist</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup></mrow></math><span class="equation-qualifier">For every j ∈ J and k ∈ K.</span></div><span class="equation-number">(3)</span></div><p class="equation-description"><strong>Existing adult and pediatric burn care capabilities are preserved.</strong></p><div class="equation" role="group" aria-label="Constraint 4: limit the number of new designations"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 4: limit the number of new designations"><mrow><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>J</mi></mrow></munder><mo>(</mo><msubsup><mi>x</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup><mo>−</mo><msubsup><mi>exist</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup><mo>)</mo><mo>≤</mo><msub><mi>p</mi><mrow><mi>k</mi></mrow></msub></mrow></math><span class="equation-qualifier">For every k ∈ K.</span></div><span class="equation-number">(4)</span></div><p class="equation-description"><strong>The number of upgrades cannot exceed the budget for that care type.</strong></p><div class="equation" role="group" aria-label="Constraint 5: meet the minimum coverage target"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 5: meet the minimum coverage target"><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>I</mi></mrow></munder><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>J</mi><mo>:</mo><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>≤</mo><mi>T</mi></mrow></munder><msubsup><mi>h</mi><mrow><mi>i</mi></mrow><mi>k</mi></msubsup><msubsup><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>k</mi></msubsup><mo>≥</mo><mi>α</mi><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>I</mi></mrow></munder><msubsup><mi>h</mi><mrow><mi>i</mi></mrow><mi>k</mi></msubsup></mrow></math><span class="equation-qualifier">For every k ∈ K.</span></div><span class="equation-number">(5)</span></div><p class="equation-description"><strong>At least fraction α of total demand must be assigned within distance T.</strong></p><div class="equation" role="group" aria-label="Constraint 6: binary decisions"><div class="equation-scroll" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Constraint 6: binary decisions"><mrow><msubsup><mi>x</mi><mrow><mi>j</mi></mrow><mi>k</mi></msubsup><mo>,</mo><msubsup><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow><mi>k</mi></msubsup><mo>∈</mo><mo>{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>}</mo></mrow></math><span class="equation-qualifier">For all applicable i, j, and k.</span></div><span class="equation-number">(6)</span></div><p class="equation-description"><strong>Service availability and hospital assignments are binary decisions.</strong></p>
+                <p>This formulation balances efficiency (minimizing weighted distance) with equity (ensuring a minimum level of access for all).</p>
+
+<h3 id="implementation">3.5 Implementation</h3>
+<p>The model was implemented in Python using Gurobi 11.0 with a professional license. Data processing used pandas and NumPy. The data preparation workflow is as follow:</p>
+<ul>
+<li>Processes raw Census ZCTA data to extract population, demographics, and centroid coordinates.</li>
+<li>Geocodes hospital addresses using geopy with a checkpointing system to prevent data loss.</li>
+<li>Joins census, centroid, and geocoded facility data into a unified dataset.</li>
+<li>Translates the merged dataset into the format required for the optimization model.</li>
+</ul>
+<p>The optimization was run using two scripts:</p>
+<ul>
+<li>One that solves a single scenario with fixed parameters.</li>
+<li>Another iterates over multiple thresholds T ∈ {30, 60, 90} km and limits p ∈ {5, 10, 15, 20}.</li>
+</ul>
+<p>For the base scenario we set T = 60 km, α = 0.6, and <var>p</var><sub>A</sub> = <var>p</var><sub>P</sub> = 10. The model contains approximately 33,000 demand points and 634 hospitals, resulting in about 20 million binary assignment variables. Each instance solved in less than one second.</p>
+</section>
+<section id="results">
+<h2>4. Experimental Design and Results</h2>
+<h3>4.1 Experimental Design</h3>
+<p>We conducted experiments to evaluate the impact of adding new burn centers. The key parameters varied were:</p>
+<ul>
+<li>Coverage threshold T ∈ {30, 60, 90} km</li>
+<li>Number of new centers per care type p ∈ {5, 10, 15, 20}</li>
+<li>Coverage target α = 0.6 (60% of demand must be within T )</li>
+</ul>
+<p>For each combination, we ran the optimization model and recorded:</p>
+<ul>
+<li>Optimal objective value (total weighted distance)</li>
+<li>Set of hospitals selected for new adult burn centers</li>
+<li>Set of hospitals selected for new pediatric burn centers</li>
+<li>Adult and pediatric coverage achieved</li>
+<li>Average and maximum travel distances</li>
+</ul>
+<p>Baseline metrics (with only existing burn centers) were computed using a nearest-neighbor assignment.</p>
+<h3>4.2 Results</h3>
+<p>Table 1 presents the key performance metrics for all combinations of T and p. As expected, increasing p improves coverage and reduces travel distances. The coverage requirement of 60% is met in all scenarios, but the stricter threshold T = 30 km requires more new centers to achieve comparable coverage.</p><div class="table-scroll" role="region" aria-label="Sensitivity analysis results; scroll horizontally on small screens" tabindex="0">
+                    <table id="results-table">
+                        <caption>Table 1. Sensitivity analysis: coverage and travel distances for different thresholds <var>T</var> (km) and numbers of new centers <var>p</var>.</caption>
+                        <thead><tr><th scope="col">T (km)</th><th scope="col">p</th><th scope="col">Adult coverage (%)</th><th scope="col">Pediatric coverage (%)</th><th scope="col">Average adult (km)</th><th scope="col">Average pediatric (km)</th><th scope="col">Maximum adult (km)</th><th scope="col">Maximum pediatric (km)</th></tr></thead>
+                        <tbody><tr><td>30</td><td>15</td><td>72.2</td><td>68.4</td><td>47.2</td><td>72.1</td><td>369</td><td>2332</td></tr>
+<tr><td>30</td><td>20</td><td>74.6</td><td>71.7</td><td>42.4</td><td>50.4</td><td>369</td><td>428</td></tr>
+<tr><td>60</td><td>5</td><td>68.4</td><td>60.8</td><td>57.7</td><td>66.7</td><td>505</td><td>505</td></tr>
+<tr><td>60</td><td>10</td><td>70.6</td><td>66.0</td><td>51.2</td><td>59.0</td><td>428</td><td>428</td></tr>
+<tr><td>60</td><td>15</td><td>72.5</td><td>68.7</td><td>46.2</td><td>52.9</td><td>369</td><td>379</td></tr>
+<tr><td>60</td><td>20</td><td>74.9</td><td>71.6</td><td>42.4</td><td>48.2</td><td>369</td><td>379</td></tr>
+<tr><td>90</td><td>5</td><td>68.4</td><td>60.8</td><td>57.7</td><td>66.7</td><td>505</td><td>505</td></tr>
+<tr><td>90</td><td>10</td><td>70.6</td><td>66.0</td><td>51.2</td><td>59.0</td><td>428</td><td>428</td></tr>
+<tr><td>90</td><td>15</td><td>72.5</td><td>68.7</td><td>46.2</td><td>52.9</td><td>369</td><td>379</td></tr>
+<tr><td>90</td><td>20</td><td>74.9</td><td>71.6</td><td>42.4</td><td>48.2</td><td>369</td><td>379</td></tr></tbody>
+                    </table>
+                </div>
+<h3>4.3 Visualization</h3>
+<p>Figure 1 illustrates the trade-off between the number of new centers and the average travel distance. The curves flatten after about 15 new centers, indicating diminishing returns.</p><figure id="sensitivity-figure" class="report-figure">
+                    <a href="../assets/opti_result.png" aria-label="Open the sensitivity analysis figure at full resolution"><img src="../assets/opti_result.png" loading="lazy" alt="Four plots compare adult and pediatric coverage and average travel distance against the number of new centers for thresholds of 30, 60, and 90 km. Coverage increases and average distances decrease as centers are added. The 60 and 90 km curves overlap; numerical values appear in Table 1 above."></a>
+                    <figcaption><strong>Figure 1.</strong> Adult and pediatric coverage and average travel distance as a function of the number of new centers <var>p</var>, for coverage thresholds <var>T</var> = 30, 60, and 90 km. <a href="../assets/opti_result.png">View full-size figure</a>.</figcaption>
+                </figure><p>The most striking improvement is in the maximum travel distance. With only five new centers, the maximum adult distance remains above 500 km, but with ten new centers it drops to around 430 km, and with fifteen it falls below 370 km. Pediatric maximum distance, initially very high for T = 30 (over 2300 km), is reduced to under 430 km with 20 new centers.</p>
+</section>
+<section id="analysis">
+<h2>5. Analysis of Results</h2>
+<p>Our results demonstrate that strategic placement of new burn centers can dramatically improve access equity. The key findings are:</p>
+<h3>5.1 Coverage Improvements</h3>
+<p>Adding 10 adult and 10 pediatric burn centers (the base scenario) increased adult coverage within 60 km from 61% to 69% (+8.2 percentage points) and pediatric coverage from 60% to 73% (+13.4 percentage points). These gains represent millions of people who now have reasonable access to specialized burn care.</p>
+<p><em>Source note: the coverage figures in this narrative differ from Table 1, which reports 70.6% adult coverage and 66.0% pediatric coverage for T = 60 km and p = 10. Both are reproduced as reported in the PDF.</em></p>
+<h3>5.2 Distance Reductions</h3>
+<p>Average travel distances decreased by approximately 28% for adults (from 71 km to 51 km) and 30% for pediatric patients (from 85 km to 59 km). The maximum distance reductions were even more dramatic: maximum adult distance dropped 83% from 2470 km to 427 km, while maximum pediatric distance dropped 82% from 2335 km to 431 km. These reductions directly address the worst-case access disparities that affect rural populations.</p>
+<h3 id="sensitivity">5.3 Sensitivity and Diminishing Returns</h3>
+<p>The sensitivity analysis reveals important policy insights. The largest gains occur between p = 5 and p = 10. After p = 15, further improvements are modest. This suggests that a prudent policy would be to start with 10–15 new centers, achieving most of the potential benefit without over-investing. For the strictest threshold T = 30 km, even 15 new centers achieve only 72% adult coverage, and pediatric coverage lags behind. Increasing to 20 new centers boosts pediatric coverage by over three percentage points and cuts average pediatric distance by 30%. This suggests that achieving high coverage under a strict threshold requires more substantial investment. For T = 60 and T = 90, the coverage values are identical because the coverage constraint (α = 0.6) is already satisfied; the model focuses on minimizing distance. Hence, the average and maximum distances are the same for both thresholds when p is fixed.</p>
+<h3>5.4 Geographic Patterns</h3>
+<p>The model selects hospitals in previously underserved regions, particularly in the Midwest, Mountain West, and parts of the South. Some hospitals are recommended for both adult and pediatric care, representing high-value opportunities to expand comprehensive burn services at a single location.</p>
+</section>
+<section id="conclusion">
+<h2>6. Conclusion</h2>
+<h3>6.1 Summary</h3>
+<p>Our optimization model provides a rigorous, data-driven method for expanding burn care capacity in the United States. The results demonstrate that targeting a small number of hospitals for upgrading (10–15 new centers) can lead to substantial improvements in access and equity. Coverage increases by 8–13 percentage points, average travel distances drop by nearly 30%, and maximum travel distances fall by over 80%. These improvements directly address the geographic disparities documented in prior work.</p>
+<h3>6.2 Future Work</h3>
+<p>Several extensions could build on this work:</p>
+<ul>
+<li>Road network travel times: Replace Haversine distances with actual road network travel times (e.g., using OSRM or Google Maps API) for greater accuracy.</li>
+<li>Cost considerations: Incorporate the costs of upgrading different hospitals (e.g., trauma centers may be cheaper to upgrade than building new facilities).</li>
+<li>Burn severity stratification: Separate demand by burn severity (e.g., major burns requiring full burn centers vs. minor burns treatable locally).</li>
+<li>Capacity constraints: Include bed capacity limits to ensure selected centers can handle additional patient volume.</li>
+<li>Stakeholder engagement: Validate model recommendations with state health departments and burn associations.</li>
+</ul>
+<h3>6.3 Policy Implications</h3>
+<p>Our findings suggest that investing in 10–15 strategically located burn centers could dramatically improve national access to specialized burn care. Decision makers can use our model’s recommendations as evidence-based guidance for resource allocation, particularly in underserved regions of the Midwest, Mountain West, and South.</p>
+</section>
+<section id="references">
+<h2>References</h2>
+<ol class="report-references">
+<li id="ref-1">Louick EA, Phelan HA, Phillips BD, Hickerson WL, Kearns RD, Carter JE. (2024). Development of the national injury resource database (NIRD). Burns, 50(2):315–320.</li>
+<li id="ref-2">Ivanko A, Garbuzov AE, Schoen JE, Kearns R, Phillips B, Murata E, Danos D, Phelan HA, Carter JE. (2024). The Burden of Burns: An Analysis of Public Health Measures. Journal of Burn Care &amp; Research.</li>
+<li id="ref-3">Carmichael H, Wiktor AJ, McIntyre RC, Lambert WA, Velopulos CG. (2019). Regional disparities in access to verified burn center care in the United States. Journal of Trauma and Acute Care Surgery, 87(1):111–116.</li>
+<li id="ref-4">Klein MB, Nathens AB, Emerson D, Heimbach DM, Gibran NS. (2007). An analysis of the long-distance transport of burn patients to a regional burn center. Journal of Burn Care &amp; Research, 28(1):49–55.</li>
+<li id="ref-5">Hakimi SL. (1964). Optimum locations of switching centers and the absolute centers and medians of a graph. Operations Research, 12(3):450–459.</li>
+<li id="ref-6">Daskin MS. (1995). Network and Discrete Location: Models, Algorithms, and Applications. John Wiley &amp; Sons.</li>
+<li id="ref-7">Church R, ReVelle C. (1974). The maximal covering location problem. Papers of the Regional Science Association, 32(1):101–118.</li>
+<li id="ref-8">Owen SH, Daskin MS. (1998). Strategic facility location: A review. European Journal of Operational Research, 111(3):423–447.</li>
+</ol>
+</section>
+<!-- <section id="contributions">
+<h2>Team Contributions</h2>
+<ul>
+<li>Edo Yawovi: Data preprocessing (census, geocoding, merge notebooks), optimization model implementation, results analysis, and report writing (Sections 1, 2, 3, 5, 6).</li>
+<li>Conner Matuza: Literature review (Section 3), post-processing and evaluation (post process notebooks), visualization generation, and report writing (Sections 4, 7, and editing).</li>
+</ul>
+</section> -->
+</article>
+        <footer class="report-footer"><a href="index.html#projects">&larr; Back to projects</a></footer>
+    </main>
+</body>
+</html>
