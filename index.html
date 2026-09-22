@@ -7,6 +7,244 @@
     <script src="js/redirect.js"></script>
 </head>
 <body>
-    <p><a href="html/index.html">Open the portfolio</a></p>
+    <!-- Matrix Rain Background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Landing Overlay -->
+    <section id="landing-overlay" class="landing-overlay">
+        <div class="landing-content">
+            <h1 class="landing-title">The Choice is Yours</h1>
+            <p class="landing-subtitle">You take the <span class="blue-text">blue pill</span>, the story ends. You wake
+                up in your bed and believe whatever you want to believe.</p>
+            <p class="landing-subtitle">You take the <span class="red-text">red pill</span>, you stay in Wonderland, and
+                I show you how deep the rabbit hole goes.</p>
+
+            <div class="pills-container">
+                <div class="pill-wrapper" id="blue-pill-wrapper">
+                    <div class="pill blue-pill" id="blue-pill"></div>
+                    <span class="pill-label">Reality</span>
+                </div>
+                <div class="pill-wrapper" id="red-pill-wrapper">
+                    <div class="pill red-pill" id="red-pill"></div>
+                    <span class="pill-label">Matrix</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="nav">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">DS<span class="matrix-glow">_</span></a>
+            <ul class="nav-menu">
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <div class="glitch-wrapper">
+                <h1 class="hero-title">
+                    <span class="typing-text" id="typing-text"></span>
+                    <span class="cursor">|</span>
+                </h1>
+            </div>
+            <p class="hero-subtitle">Transforming Data Into <span class="matrix-highlight">Insights</span></p>
+            <p class="hero-description">
+                Machine Learning • Linear Algebra • Statistical Analysis
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-primary" id="view-work-btn">View My Work</a>
+                <a href="#contact" class="btn btn-secondary" id="contact-btn">Get In Touch</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll Down</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+        <div class="container">
+            <h2 class="section-title">About <span class="matrix-highlight">Me</span></h2>
+            <div class="about-content">
+                <div class="about-text glass-card">
+                    <p class="about-intro">
+                        Welcome to the Matrix of Data Science. I'm a data scientist who specializes in
+                        extracting meaningful patterns from complex datasets using advanced mathematical
+                        techniques and machine learning algorithms.
+                    </p>
+                    <p>
+                        My work focuses on leveraging linear algebra, statistical modeling, MAthematical
+                        programming and cutting-edge ML frameworks to solve real-world problems. From dimensionality reduction to neural
+                        network optimization, I transform raw data into actionable intelligence.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills section">
+        <div class="container">
+            <h2 class="section-title">Technical <span class="matrix-highlight">Arsenal</span></h2>
+            <div class="skills-grid">
+                <div class="skill-card glass-card" data-skill="ml">
+                    <div class="skill-icon">🤖</div>
+                    <h3 class="skill-title">Machine Learning</h3>
+                    <p class="skill-description">
+                        TensorFlow, PyTorch, Scikit-learn, XGBoost, Neural Networks, Deep Learning
+                    </p>
+                </div>
+                <div class="skill-card glass-card" data-skill="math">
+                    <div class="skill-icon">📐</div>
+                    <h3 class="skill-title">Mathematics</h3>
+                    <p class="skill-description">
+                        Linear Algebra, Calculus, Statistics, Probability Theory, Optimization
+                    </p>
+                </div>
+                <div class="skill-card glass-card" data-skill="programming">
+                    <div class="skill-icon">💻</div>
+                    <h3 class="skill-title">Programming</h3>
+                    <p class="skill-description">
+                        Python, R, SQL, NumPy, Pandas, Matplotlib, Seaborn, Jupyter
+                    </p>
+                </div>
+                <div class="skill-card glass-card" data-skill="data">
+                    <div class="skill-icon">📊</div>
+                    <h3 class="skill-title">Data Engineering</h3>
+                    <p class="skill-description">
+                        ETL Pipelines, Big Data, Spark, Hadoop, Data Warehousing, Cloud Platforms
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects section">
+        <div class="container">
+            <h2 class="section-title">Featured <span class="matrix-highlight">Projects</span></h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <article class="project-card glass-card" id="project-1">
+                    <div class="project-header">
+                        <h3 class="project-title">Neural Network Optimizer</h3>
+                        <span class="project-tag">Deep Learning</span>
+                    </div>
+                    <p class="project-description">
+                        Developed a custom optimization algorithm using advanced linear algebra techniques
+                        to improve convergence rates in deep neural networks by 35%. Implemented matrix
+                        factorization methods for efficient gradient computation.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">PyTorch</span>
+                        <span class="tech-badge">NumPy</span>
+                        <span class="tech-badge">CUDA</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link" id="project-1-demo">View Demo</a>
+                        <a href="#" class="project-link" id="project-1-code">Source Code</a>
+                    </div>
+                </article>
+
+                <!-- Project 2 -->
+                <article class="project-card glass-card" id="project-2">
+                    <div class="project-header">
+                        <h3 class="project-title">Dimensionality Reduction Suite</h3>
+                        <span class="project-tag">Linear Algebra</span>
+                    </div>
+                    <p class="project-description">
+                        Built a comprehensive toolkit for high-dimensional data analysis using PCA, t-SNE,
+                        and UMAP. Leveraged eigenvalue decomposition and singular value decomposition for
+                        feature extraction on datasets with 10,000+ dimensions.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Scikit-learn</span>
+                        <span class="tech-badge">SciPy</span>
+                        <span class="tech-badge">Plotly</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link" id="project-2-demo">View Demo</a>
+                        <a href="#" class="project-link" id="project-2-code">Source Code</a>
+                    </div>
+                </article>
+
+                <!-- Project 3 -->
+                <article class="project-card glass-card" id="project-3">
+                    <div class="project-header">
+                        <h3 class="project-title">Predictive Analytics Dashboard</h3>
+                        <span class="project-tag">ML Pipeline</span>
+                    </div>
+                    <p class="project-description">
+                        Created an end-to-end machine learning pipeline with real-time predictions.
+                        Integrated ensemble methods, automated feature engineering, and deployed scalable
+                        models achieving 94% accuracy on production data.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">XGBoost</span>
+                        <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">Docker</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" class="project-link" id="project-3-demo">View Demo</a>
+                        <a href="#" class="project-link" id="project-3-code">Source Code</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+        <div class="container">
+            <h2 class="section-title">Enter The <span class="matrix-highlight">Matrix</span></h2>
+            <div class="contact-content">
+                <p class="contact-intro">
+                    Ready to collaborate on your next data science project? Let's connect and transform
+                    your data into actionable insights.
+                </p>
+                <div class="contact-methods">
+                    <a href="mailto:contact@example.com" class="contact-card glass-card" id="email-contact">
+                        <span class="contact-icon">📧</span>
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">contact@example.com</span>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="contact-card glass-card"
+                        id="linkedin-contact">
+                        <span class="contact-icon">💼</span>
+                        <span class="contact-label">LinkedIn</span>
+                        <span class="contact-value">Connect with me</span>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="contact-card glass-card" id="github-contact">
+                        <span class="contact-icon">🔗</span>
+                        <span class="contact-label">GitHub</span>
+                        <span class="contact-value">View repositories</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                &copy; 2025 Data Scientist Portfolio. Designed with
+                <span class="matrix-highlight">linear algebra</span> in mind.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
