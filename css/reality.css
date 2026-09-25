@@ -101,3 +101,16 @@ body {
     color: #333;
     pointer-events: none;
 }
+
+/* Controls stay usable over either the skyline or the street. */
+.simulation-controls { align-self: flex-end; max-width: 100%; pointer-events: auto; }
+#camera-hint { color: #e7efdf; background: #17271fe8; padding: 0.6rem 0.9rem; border-radius: 4px; font: 0.8rem monospace; }
+.control-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.simulation-controls button { border: 1px solid #8b9f8c; border-radius: 4px; background: #17271fe8; color: #e7efdf; padding: 0.8rem 1rem; font: bold 0.75rem monospace; letter-spacing: 0.06em; cursor: pointer; }
+.simulation-controls button:hover, .simulation-controls button[aria-pressed="true"] { background: #405c45; }
+.simulation-controls button:focus-visible { outline: 2px solid #c7f9a2; outline-offset: 3px; }
+#walk-controls { margin-top: 0.5rem; text-align: right; }
+#walk-controls button { min-width: 48px; min-height: 48px; touch-action: none; font-size: 1.1rem; }
+#canvas-container canvas { display: block; touch-action: none; }
+@media (max-width: 600px) { .ui-overlay { padding: 1rem; } .simulation-controls { align-self: stretch; } .control-buttons button { flex: 1 1 40%; } }
+@media (prefers-reduced-motion: reduce) { .status-dot { animation: none; } }
