@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="576pt" height="316.8pt" viewBox="0 0 576 316.8" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-08T16:37:14.744180</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 316.8 
+L 576 316.8 
+L 576 0 
+L 0 0 
+z
+" style="fill: #0c1711"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 128.55 249.2 
+L 554 249.2 
+L 554 22 
+L 128.55 22 
+z
+" style="fill: #0c1711"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 128.55 249.2 
+L 128.55 22 
+" clip-path="url(#p78f9036240)" style="fill: none; stroke: #294234; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="128.55" y="265.558281" transform="rotate(-0 128.55 265.558281)">0</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 217.185417 249.2 
+L 217.185417 22 
+" clip-path="url(#p78f9036240)" style="fill: none; stroke: #294234; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="217.185417" y="265.558281" transform="rotate(-0 217.185417 265.558281)">1</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 305.820833 249.2 
+L 305.820833 22 
+" clip-path="url(#p78f9036240)" style="fill: none; stroke: #294234; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="305.820833" y="265.558281" transform="rotate(-0 305.820833 265.558281)">2</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_7">
+      <path d="M 394.45625 249.2 
+L 394.45625 22 
+" clip-path="url(#p78f9036240)" style="fill: none; stroke: #294234; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_4">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="394.45625" y="265.558281" transform="rotate(-0 394.45625 265.558281)">3</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_9">
+      <path d="M 483.091667 249.2 
+L 483.091667 22 
+" clip-path="url(#p78f9036240)" style="fill: none; stroke: #294234; stroke-width: 0.7; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_5">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="483.091667" y="265.558281" transform="rotate(-0 483.091667 265.558281)">4</text>
+     </g>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #d5e4da" x="341.275" y="292.204219" transform="rotate(-0 341.275 292.204219)">MAE / chemical accuracy · lower is better</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_11"/>
+     <g id="text_7">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #d5e4da" x="120.55" y="56.494683" transform="rotate(-0 120.55 56.494683)">GGNN · no edge</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_12"/>
+     <g id="text_8">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #d5e4da" x="120.55" y="139.779141" transform="rotate(-0 120.55 139.779141)">GGNN · with edge</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_13"/>
+     <g id="text_9">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #d5e4da" x="120.55" y="223.063598" transform="rotate(-0 120.55 223.063598)">Paper reference</text>
+     </g>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 128.55 32.327273 
+L 456.412406 32.327273 
+L 456.412406 72.303812 
+L 128.55 72.303812 
+z
+" clip-path="url(#p78f9036240)" style="fill: #67d8e8"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 128.55 115.61173 
+L 462.350979 115.61173 
+L 462.350979 155.58827 
+L 128.55 155.58827 
+z
+" clip-path="url(#p78f9036240)" style="fill: #819589"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 128.55 198.896188 
+L 436.114896 198.896188 
+L 436.114896 238.872727 
+L 128.55 238.872727 
+z
+" clip-path="url(#p78f9036240)" style="fill: #5bf293"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #d5e4da" x="467.048656" y="55.350855" transform="rotate(-0 467.048656 55.350855)">3.699</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #d5e4da" x="472.987229" y="138.635312" transform="rotate(-0 472.987229 138.635312)">3.766</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #d5e4da" x="446.751146" y="221.91977" transform="rotate(-0 446.751146 221.91977)">3.470</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p78f9036240">
+   <rect x="128.55" y="22" width="425.45" height="227.2"/>
+  </clipPath>
+ </defs>
+</svg>

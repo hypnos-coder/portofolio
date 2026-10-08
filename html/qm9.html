@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="QM9 molecular property prediction: comparing attention architectures, testing feature reliance, and exploring a bond-flow optimization formulation.">
+    <title>Attention Architectures for Molecular Prediction | Edo Yawovi</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/opti.css">
+    <link rel="stylesheet" href="../css/qm9.css">
+    <link rel="icon" href="../assets/images/matrix-rabbit.ico" sizes="16x16 32x32 48x48">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/matrix-rabbit-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/matrix-rabbit-180.png">
+</head>
+<body class="report-page">
+    <nav class="report-nav" aria-label="Project navigation">
+        <a href="index.html#projects">&larr; Back to projects</a>
+        <a href="#results">View results &darr;</a>
+    </nav>
+    <main class="report-main">
+        <header class="report-header">
+            <p class="report-eyebrow">AI for Earth / Molecular property prediction</p>
+            <h1>Attention Architectures for Molecular Prediction</h1>
+            <p class="report-subtitle">Testing feature reliance and tower architectures on QM9</p>
+            <p class="report-meta">QM9 / Architecture comparison / Feature diagnostics</p>
+            <p>Starting from replicated message-passing baselines, this project investigates when attention benefits from bond features, how a tower architecture changes that outcome, and which molecular inputs drive prediction error.</p>
+            <div class="report-actions">
+                <a class="btn btn-secondary" href="#report">Explore the findings &darr;</a>
+            </div>
+        </header>
+        <nav class="report-toc" aria-label="Project contents">
+            <a href="#contribution">Contribution</a>
+            <a href="#experiments">Experimental approach</a>
+            <a href="#results">Attention results</a>
+            <a href="#features">Feature ablation</a>
+            <a href="#optimization">Optimization direction</a>
+            <a href="#takeaways">Takeaways</a>
+        </nav>
+        <article id="report" class="report-content" aria-label="QM9 project findings">
+            <section id="contribution" class="report-abstract">
+                <h2>The contribution</h2>
+                <p>The project’s distinctive work is an experimental comparison of attention architectures and molecular feature choices. The experiments compared node-only GAT, edge-aware GATv2, and a tower architecture using GATv2 across molecular prediction tasks. The tower model achieved lower MAE than both other variants on the two highlighted targets: dipole moment and zero-point vibrational energy (ZPVE).</p>
+                <p>That comparison also challenged the initial hypothesis. Edge-aware GATv2 underperformed even on ZPVE, treated here as an edge-reliant target, while the tower variant recovered the advantage. The findings point toward an interaction between architecture and feature use rather than a simple rule about including or excluding bond information.</p>
+            </section>
+            <section id="experiments">
+                <h2>1. Establishing a reference, then testing alternatives</h2>
+                <p>QM9 and the message-passing study by Gilmer et al. provided the experimental reference. The replication included an NNConv model with Set2Set pooling and a gated graph neural network (GGNN). To address overfitting in NNConv, the training setup incorporated weight decay, a learning-rate scheduler, and early stopping; its reported final dipole-moment MAE was 0.628.</p>
+                <div class="result-panel">
+                    <figure class="report-figure">
+                        <img src="../assets/qm9/ggnn.svg" alt="GGNN error ratios: 3.699 without edges, 3.766 with edges, and 3.470 for the paper reference." width="800" height="440" loading="lazy">
+                        <figcaption>Dipole moment · error ratio. Values below 1 meet the chemical-accuracy threshold.</figcaption>
+                    </figure>
+                    <div class="result-insight">
+                        <p class="insight-label">Baseline calibration</p>
+                        <h3>Edges alone barely change the result</h3>
+                        <p>The GGNN error ratio was 3.699 without edge features and 3.766 with them, versus 3.470 for the paper reference. The replication is close to that reference, but none of these results reaches chemical accuracy.</p>
+                    </div>
+                </div>
+                <p>The next experiments compared attention variants and tested feature reliance. This moved the investigation beyond reproducing a baseline to examining which combinations of architecture and inputs actually improved predictions.</p>
+            </section>
+            <section id="results">
+                <h2>2. Attention results and the tower advantage</h2>
+                <div class="result-panel">
+                    <figure class="report-figure">
+                        <img src="../assets/qm9/targets.svg" alt="GAT and Set2Set edge reference compared across 13 molecular targets. GAT has lower plotted error on most targets; the reference is better on R squared, with similar error on omega." width="800" height="700" loading="lazy">
+                        <figcaption>50,000-sample comparison · approximate values reconstructed from plotted results. Compare errors within each target; properties have different scales.</figcaption>
+                    </figure>
+                    <div class="result-insight">
+                        <p class="insight-label">Across 13 targets</p>
+                        <h3>A broad advantage, with exceptions</h3>
+                        <p>GAT shows lower reported MAE than the Set2Set + edge reference on most targets. The reference performs better on electronic spatial extent (R²), while the final target (ω) is near-equal.</p>
+                        <p>The useful result is the pattern across properties: one architecture does not dominate every target. Matched data splits and training budgets would be needed to establish a benchmark improvement.</p>
+                    </div>
+                </div>
+                <div class="result-panel">
+                    <figure class="report-figure">
+                        <img src="../assets/qm9/dipole.svg" alt="Approximate dipole-moment MAE: GAT 0.495, GATv2 0.505, tower GATv2 0.425." width="800" height="440" loading="lazy">
+                        <figcaption>Dipole moment (μ) · approximate MAE reconstructed from plotted results.</figcaption>
+                    </figure>
+                    <div class="result-insight">
+                        <p class="insight-label">Dipole moment</p>
+                        <h3>The tower architecture takes the lead</h3>
+                        <p>Node-only GAT slightly outperforms edge-aware GATv2, but the tower variant achieves the lowest error of all three.</p>
+                        <p>The initial hypothesis was that edge features might interfere with a target dominated by node information. The next experiment tests that explanation against a different property.</p>
+                    </div>
+                </div>
+                <div class="result-panel">
+                    <figure class="report-figure">
+                        <img src="../assets/qm9/zpve.svg" alt="Approximate ZPVE MAE: GAT 0.185, GATv2 0.795, tower GATv2 0.148." width="800" height="440" loading="lazy">
+                        <figcaption>Zero-point vibrational energy · approximate MAE reconstructed from plotted results.</figcaption>
+                    </figure>
+                    <div class="result-insight">
+                        <p class="insight-label">Testing the hypothesis</p>
+                        <h3>ZPVE changes the explanation</h3>
+                        <p>Despite being treated as an edge-reliant target, ZPVE produces much higher error with standalone GATv2 than with GAT. Yet the tower architecture using GATv2 performs best again.</p>
+                        <p>This challenges the simple node-versus-edge explanation. An architectural mismatch is a plausible explanation for the standalone model’s weakness, rather than evidence that bond information is inherently unhelpful.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="features">
+                <h2>3. Feature ablation as a diagnostic</h2>
+                <div class="result-panel">
+                    <figure class="report-figure">
+                        <img src="../assets/qm9/ablation.svg" alt="Approximate test MAE by feature configuration: all features 0.414, atomic number 0.393, aromaticity 0.409, position 0.459." width="800" height="440" loading="lazy">
+                        <figcaption>Feature configurations · approximate test MAE reconstructed from plotted results. Labels identify experiments, not confirmed feature-removal settings.</figcaption>
+                    </figure>
+                    <div class="result-insight">
+                        <p class="insight-label">Feature diagnostics</p>
+                        <h3>Position shows the largest error</h3>
+                        <p>The position configuration has the highest plotted test MAE; the atomic-number configuration has the lowest. All-features and aromaticity results fall between them.</p>
+                        <p>The observed pattern was broadly consistent with the reference study’s feature-importance findings. Without a fully specified removal protocol, these results support a comparison of configurations rather than a recommendation to discard individual inputs.</p>
+                    </div>
+                </div>
+            </section>
+            <section id="optimization">
+                <h2>4. A proposed bond-flow optimization direction</h2>
+                <p>A further research direction explores representing a molecule as a network with flow over bonds, atom-level charge constraints, and bond-dependent costs. The proposed constrained objective is:</p>
+                <div class="equation">
+                    <div class="equation-scroll" tabindex="0">
+                        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Minimize c transpose x over x, subject to A x equals b">
+                            <mrow><munder><mi>min</mi><mi>x</mi></munder><msup><mi>c</mi><mi>T</mi></msup><mi>x</mi><mspace width="1em"/><mtext>subject to</mtext><mspace width="1em"/><mi>A</mi><mi>x</mi><mo>=</mo><mi>b</mi></mrow>
+                        </math>
+                    </div>
+                </div>
+                <dl class="notation">
+                    <dt><var>x</var></dt><dd>Flow over each bond.</dd>
+                    <dt><var>A</var></dt><dd>Graph incidence matrix mapping atoms to bonds.</dd>
+                    <dt><var>b</var></dt><dd>Net charge at each atom.</dd>
+                    <dt><var>c</var></dt><dd>Edge costs, potentially based on bond length or bond type.</dd>
+                </dl>
+                <p>This is a proposed formulation, not an evaluated predictor. Connecting its solution to dipole moment, specifying admissible flows, and validating its physical assumptions remain open steps. Its distinctive idea is to investigate molecular prediction through explicit network constraints alongside the learned models.</p>
+            </section>
+            <section id="takeaways">
+                <h2>5. What the experiments establish</h2>
+                <ul>
+                    <li><strong>Architecture matters for feature use.</strong> The tower variant achieved the lowest MAE on both highlighted targets, even when standalone edge-aware attention struggled.</li>
+                    <li><strong>The initial feature-reliance hypothesis did not hold across targets.</strong> ZPVE challenged the explanation suggested by the dipole-moment result.</li>
+                    <li><strong>Ablation adds context to model comparisons.</strong> The ablation showed feature-importance patterns broadly consistent with the reference study.</li>
+                    <li><strong>Network optimization offers a next research question.</strong> The bond-flow objective is a starting point for investigation, with no predictive results reported yet.</li>
+                </ul>
+                <p>The observed model ordering motivates further testing with repeated runs and uncertainty estimates. The main finding is the consistent tower advantage across the two focused comparisons.</p>
+            </section>
+        </article>
+        <footer class="report-footer"><a href="index.html#projects">&larr; Back to projects</a></footer>
+    </main>
+</body>
+</html>
